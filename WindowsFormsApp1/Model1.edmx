@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Model1StoreContainer">
+    <EntitySet Name="Students" EntityType="Model1.Store.Students" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Disciplines" EntityType="Model1.Store.Disciplines" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Grades" EntityType="Model1.Store.Grades" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="GradeStudent" Association="Model1.Store.GradeStudent">
+      <End Role="Grade" EntitySet="Grades" />
+      <End Role="Student" EntitySet="Students" />
+    </AssociationSet>
+    <AssociationSet Name="GradeDiscipline" Association="Model1.Store.GradeDiscipline">
+      <End Role="Grade" EntitySet="Grades" />
+      <End Role="Discipline" EntitySet="Disciplines" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Students">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Disciplines">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Grades">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StudentID" Type="int" Nullable="false" />
+    <Property Name="DisciplineID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="GradeStudent">
+    <End Role="Grade" Type="Model1.Store.Grades" Multiplicity="*" />
+    <End Role="Student" Type="Model1.Store.Students" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Grade">
+        <PropertyRef Name="StudentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="GradeDiscipline">
+    <End Role="Grade" Type="Model1.Store.Grades" Multiplicity="*" />
+    <End Role="Discipline" Type="Model1.Store.Disciplines" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Discipline">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Grade">
+        <PropertyRef Name="DisciplineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model1" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="Model1Container" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Students" EntityType="Model1.Student" />
+          <EntitySet Name="Disciplines" EntityType="Model1.Discipline" />
+          <EntitySet Name="Grades" EntityType="Model1.Grade" />
+          <AssociationSet Name="GradeStudent" Association="Model1.GradeStudent">
+            <End Role="Grade" EntitySet="Grades" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="GradeDiscipline" Association="Model1.GradeDiscipline">
+            <End Role="Grade" EntitySet="Grades" />
+            <End Role="Discipline" EntitySet="Disciplines" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Grades" Relationship="Model1.GradeStudent" FromRole="Student" ToRole="Grade" />
+        </EntityType>
+        <EntityType Name="Discipline">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Grades" Relationship="Model1.GradeDiscipline" FromRole="Discipline" ToRole="Grade" />
+        </EntityType>
+        <EntityType Name="Grade">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Student" Relationship="Model1.GradeStudent" FromRole="Grade" ToRole="Student" />
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Discipline" Relationship="Model1.GradeDiscipline" FromRole="Grade" ToRole="Discipline" />
+          <Property Name="DisciplineID" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+        </EntityType>
+        <Association Name="GradeStudent">
+          <End Type="Model1.Grade" Role="Grade" Multiplicity="*" />
+          <End Type="Model1.Student" Role="Student" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Grade">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GradeDiscipline">
+          <End Type="Model1.Grade" Role="Grade" Multiplicity="*" />
+          <End Type="Model1.Discipline" Role="Discipline" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Discipline">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Grade">
+              <PropertyRef Name="DisciplineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Model1StoreContainer" CdmEntityContainer="Model1Container">
+    <EntitySetMapping Name="Students">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Student)">
+        <MappingFragment StoreEntitySet="Students">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Disciplines">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Discipline)">
+        <MappingFragment StoreEntitySet="Disciplines">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Grades">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Grade)">
+        <MappingFragment StoreEntitySet="Grades">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+          <ScalarProperty Name="DisciplineID" ColumnName="DisciplineID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
